@@ -48,20 +48,10 @@
     }
   </style>
   <body>
-    <h1>Create new department</h1>
+    <h1>Add shift to an employee</h1>
     <form>
       <div id="container" class="form-group">
-        <label for="exampleInputEmail1">Department's name</label>
-        <input
-          type="email"
-          class="form-control"
-          id="exampleInputEmail1"
-          aria-describedby="emailHelp"
-          placeholder="Enter department's name"
-        />
-      </div>
-      <div id="container" class="form-group">
-        Select manager
+        Select Employee
         <select class="form-select" aria-label="Default select example">
           <option selected>Avi</option>
           <option value="1">One</option>
@@ -69,7 +59,35 @@
           <option value="3">Three</option>
         </select>
       </div>
-      <button type="submit" class="btn btn-warning">Create new</button>
+      </div>
+      <div class="form-group">
+        <label for="shiftDate">Shift date</label>
+        <input
+          type="text"
+          class="form-control"
+          id="shiftDate"
+          placeholder="Enter Year"
+        />
+      </div>
+      <div class="form-group">
+        <label for="hourStart">Start</label>
+        <input
+          type="text"
+          class="form-control"
+          id="hourStart"
+          placeholder="Enter shift's start hour"
+        />
+      </div>
+      <div class="form-group">
+        <label for="hourEnd">End</label>
+        <input
+          type="text"
+          class="form-control"
+          id="hourEnd"
+          placeholder="Enter shift's end hour"
+        />
+      </div>
+      <button type="submit" class="btn btn-warning">Add shift</button>
     </form>
   </body>
 </html>

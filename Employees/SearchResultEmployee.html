@@ -15,8 +15,7 @@
 
   <script>
     function backTable() {
-      window.location.href =
-        "file:///C:/Users/Miki%20Biba/Desktop/Factory%20Tech%20Project%201/Employees/Employees.html";
+      window.location.href = "Employees.html";
     }
   </script>
   <style>
@@ -30,8 +29,6 @@
       width: 25%;
     }
     h1 {
-      margin-top: 100px;
-      margin-right: 800px;
       color: #fad643 !important;
       text-align: center;
       margin-bottom: 50px;
@@ -39,7 +36,6 @@
     body {
       background-size: cover;
       background-color: black;
-
       background-image: url("https://images.pexels.com/photos/3785931/pexels-photo-3785931.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
     }
     button {
@@ -53,37 +49,26 @@
     label {
       color: white;
     }
+    #tbl {
+      width: 65%;
+      margin-left: auto;
+      margin-right: auto;
+    }
   </style>
   <body>
     <h1>Employee details</h1>
-    <form>
-      <div id="container" class="form-group">
-        <label for="exampleInputEmail1">First Name</label>
-        <input
-          type="text"
-          class="form-control"
-          id="exampleInputEmail1"
-          aria-describedby="emailHelp"
-        />
-      </div>
-      <div id="container" class="form-group">
-        <label for="exampleInputEmail1">Last Name</label>
-        <input
-          type="text"
-          class="form-control"
-          id="exampleInputEmail1"
-          aria-describedby="emailHelp"
-        />
-      </div>
-      <div class="form-group">
-        <label for="exampleInputPassword1">Start work year</label>
-        <input type="text" class="form-control" id="exampleInputPassword1" />
-      </div>
-      <div class="form-group">
-        <label for="exampleInputPassword1">Department</label>
-        <input type="text" class="form-control" id="exampleInputPassword1" />
-      </div>
-    </form>
+    <table id="tbl" class="table table-dark overflow-auto">
+      <thead>
+        <tr>
+          <th scope="col">Full Name</th>
+          <th scope="col">Start work year</th>
+          <th scope="col">Shifts</th>
+          <th scope="col">Edit</th>
+          <th scope="col">Delete</th>
+        </tr>
+      </thead>
+      <tbody id="tBody"></tbody>
+    </table>
     <div class="col text-center">
       <button onclick="backTable()" type="submit" class="btn btn-warning">
         Back to table

@@ -13,13 +13,6 @@
     <title>Document</title>
   </head>
 
-  <script>
-    function addDepartment() {
-      window.location.href =
-        "file:///C:/Users/Miki%20Biba/Desktop/Factory%20Tech%20Project%201/Departments/NewDepartment.html";
-    }
-  </script>
-
   <style>
     #searchName,
     #searchDepartment {
@@ -59,7 +52,7 @@
       margin-bottom: 20px;
     }
   </style>
-  <body>
+  <body onload="getData()">
     <h1>Departments</h1>
     <div class="table-wrapper-scroll-y my-custom-scrollbar">
       <table id="tbl" class="table table-dark overflow-auto">
@@ -71,57 +64,7 @@
             <th scope="col">Delete ?</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>Publishers</td>
-            <td>Miki</td>
-            <td><a href="">Edit</a></td>
-            <td><a href="">Delete</a></td>
-          </tr>
-          <tr>
-            <td>Publishers</td>
-            <td>Miki</td>
-            <td><a href="">Edit</a></td>
-            <td><a href="">Delete</a></td>
-          </tr>
-          <tr>
-            <td>Publishers</td>
-            <td>Miki</td>
-            <td><a href="">Edit</a></td>
-            <td><a href="">Delete</a></td>
-          </tr>
-          <tr>
-            <td>Publishers</td>
-            <td>Miki</td>
-            <td><a href="">Edit</a></td>
-            <td><a href="">Delete</a></td>
-          </tr>
-          <tr>
-            <td>Publishers</td>
-            <td>Miki</td>
-            <td><a href="">Edit</a></td>
-            <td><a href="">Delete</a></td>
-          </tr>
-          <tr>
-            <td>Publishers</td>
-            <td>Miki</td>
-            <td><a href="">Edit</a></td>
-            <td><a href="">Delete</a></td>
-          </tr>
-          <tr>
-            <td>Publishers</td>
-            <td>Miki</td>
-            <td><a href="">Edit</a></td>
-            <td><a href="">Delete</a></td>
-          </tr>
-          <tr>
-            <td>Publishers</td>
-            <td>Miki</td>
-            <td><a href="">Edit</a></td>
-            <td><a href="">Delete</a></td>
-          </tr>
-          <tr></tr>
-        </tbody>
+        <tbody id="tBody"></tbody>
       </table>
     </div>
     <div class="col text-center">
@@ -129,5 +72,51 @@
         Add department
       </button>
     </div>
+
+    <script>
+      function addDepartment() {
+        window.location.href = "NewDepartment.html";
+      }
+      const getData = async () => {
+        let resp = await fetch("https://localhost:44364/api/department");
+        let departments = await resp.json();
+
+        console.log(departments);
+
+        let body = document.getElementById("tBody");
+
+        departments.forEach((dep) => {
+          let tdName = document.createElement("td");
+          tdName.innerText = dep.Name;
+
+          let tdManager = document.createElement("td");
+          tdManager.innerText = dep.Manager.First_name;
+
+          let tdEdit = document.createElement("td");
+
+          let linkEdit = document.createElement("a");
+          linkEdit.innerText = "Edit";
+          linkEdit.href = "EditDepartment.html?id=" + dep.ID;
+
+          tdEdit.appendChild(linkEdit);
+
+          let tdDelete = document.createElement("td");
+
+          let linkDelete = document.createElement("a");
+          linkDelete.innerText = "Delete";
+          linkDelete.href = "EditDepartment.html";
+
+          tdDelete.appendChild(linkDelete);
+          let trObj = document.createElement("tr");
+
+          trObj.appendChild(tdName);
+          trObj.appendChild(tdManager);
+          trObj.appendChild(tdEdit);
+          trObj.appendChild(tdDelete);
+
+          body.appendChild(trObj);
+        });
+      };
+    </script>
   </body>
 </html>

@@ -19,8 +19,11 @@
     * {
       color: #eee9d5 !important;
     }
+    input {
+      color: black !important;
+    }
 
-    form {
+    #form {
       margin-left: auto;
       margin-right: 200px;
       width: 25%;
@@ -47,30 +50,80 @@
       color: black !important;
     }
   </style>
-  <body>
+  <body onload="loadData()">
     <h1>Edit an exsiting department</h1>
-    <form>
+    <div id="form" class="form-group">
       <div id="container" class="form-group">
         <label for="exampleInputEmail1">Department's name</label>
         <input
-          type="email"
+          type="text"
           class="form-control"
-          id="exampleInputEmail1"
+          id="dep"
           aria-describedby="emailHelp"
           placeholder="Enter department's name"
         />
       </div>
       <div id="container" class="form-group">
-        <label for="exampleInputEmail1">Manager</label>
-        <input
-          type="text"
-          class="form-control"
-          id="exampleInputEmail1"
-          aria-describedby="emailHelp"
-          placeholder="Enter manager's name"
-        />
+        Select Manager
+        <select
+          id="select"
+          class="form-select"
+          aria-label="Default select example"
+          id="select"
+        ></select>
       </div>
-      <button type="submit" class="btn btn-warning">Submit changes</button>
-    </form>
+      <button type="input" class="btn btn-warning" onclick="update()">
+        Submit changes
+      </button>
+    </div>
+    <script>
+      let depid;
+
+      async function update() {
+        let obj = {
+          Name: document.getElementById("dep").value,
+          Manager: document.getElementById("manager").value,
+        };
+
+        let fetchParams = {
+          method: "PUT",
+          body: JSON.stringify(obj),
+          headers: { "Content-Type": "application/json" },
+        };
+
+        let resp = await fetch(
+          "https://localhost:44356/api/student/" + userid,
+          fetchParams
+        );
+        let data = await resp.json();
+
+        window.location.href = "Students.html";
+      }
+
+      async function loadData() {
+        const params = new URLSearchParams(location.search);
+        depid = params.get("id");
+
+        let resp = await fetch(
+          "https://localhost:44364/api/department/" + depid
+        );
+        let data = await resp.json();
+
+        let emps = data.Employees;
+
+        emps.forEach((emp) => {
+          let empOpt = document.createElement("option");
+          let select = document.getElementById("select");
+
+          empOpt.innerText = emp.First_name + " " + emp.Last_name;
+
+          select.appendChild(empOpt);
+        });
+
+        document.getElementById("dep").value = data.Name;
+
+        // document.getElementById("manager").value = data.Manager.First_name;
+      }
+    </script>
   </body>
 </html>

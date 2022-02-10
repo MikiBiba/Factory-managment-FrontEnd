@@ -21,7 +21,6 @@
     h1 {
       color: #fad643;
       text-align: center;
-      margin-bottom: 50px;
     }
     body {
       background-color: black;
@@ -48,7 +47,7 @@
       color: #fad643;
     }
   </style>
-  <body>
+  <body onload="getData()">
     <h1>Shifts table</h1>
     <div class="table-wrapper-scroll-y my-custom-scrollbar">
       <table id="tbl" class="table table-dark overflow-auto">
@@ -60,61 +59,60 @@
             <th scope="col">Name registered</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>10/04/2019</td>
-            <td>00:12</td>
-            <td>08:43</td>
-            <td>
-              <ul>
-                <li><a href="">Miki</a></li>
-                <li><a href="">Amit</a></li>
-                <li><a href="">Igor</a></li>
-                <li><a href="">Avi</a></li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td>10/04/2019</td>
-            <td>00:12</td>
-            <td>08:43</td>
-            <td>
-              <ul>
-                <li><a href="">Miki</a></li>
-                <li><a href="">Amit</a></li>
-                <li><a href="">Igor</a></li>
-                <li><a href="">Avi</a></li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td>10/04/2019</td>
-            <td>00:12</td>
-            <td>08:43</td>
-            <td>
-              <ul>
-                <li><a href="">Miki</a></li>
-                <li><a href="">Amit</a></li>
-                <li><a href="">Igor</a></li>
-                <li><a href="">Avi</a></li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td>10/04/2019</td>
-            <td>00:12</td>
-            <td>08:43</td>
-            <td>
-              <ul>
-                <li><a href="">Miki</a></li>
-                <li><a href="">Amit</a></li>
-                <li><a href="">Igor</a></li>
-                <li><a href="">Avi</a></li>
-              </ul>
-            </td>
-          </tr>
-        </tbody>
+        <tbody id="tBody"></tbody>
       </table>
+      <div class="col text-center">
+        <button type="submit" class="btn btn-warning">Add Shift</button>
+      </div>
     </div>
+
+    <script>
+      const getData = async () => {
+        let resp = await fetch("https://localhost:44364/api/shift");
+        let shifts = await resp.json();
+
+        console.log(shifts);
+
+        let body = document.getElementById("tBody");
+
+        shifts.forEach((shift) => {
+          let tdDate = document.createElement("td");
+          tdDate.innerText = shift.Date;
+
+          let tdStart = document.createElement("td");
+          tdStart.innerText = shift.Start_time + ":00";
+
+          let tdEnd = document.createElement("td");
+          tdEnd.innerText = shift.End_time + ":00";
+
+          let tdEdit = document.createElement("td");
+          let ulEdit = document.createElement("ul");
+
+          shift.Employees.forEach((emp) => {
+            let liEdit = document.createElement("li");
+            let linkEdit = document.createElement("a");
+
+            linkEdit.innerText = emp.First_name;
+
+            liEdit.appendChild(linkEdit);
+            ulEdit.appendChild(liEdit);
+
+            linkEdit.href =
+              "./Employees.EditEmployee.html?id=" + shift.Employees.ID;
+          });
+
+          tdEdit.appendChild(ulEdit);
+
+          let trObj = document.createElement("tr");
+
+          trObj.appendChild(tdDate);
+          trObj.appendChild(tdStart);
+          trObj.appendChild(tdEnd);
+          trObj.appendChild(tdEdit);
+
+          body.appendChild(trObj);
+        });
+      };
+    </script>
   </body>
 </html>

@@ -18,6 +18,9 @@
     #departmentInput {
       width: 25%;
     }
+    a {
+      color: #fad643;
+    }
 
     h1 {
       color: #fad643;
@@ -31,7 +34,7 @@
       background-image: url("https://images.pexels.com/photos/3785934/pexels-photo-3785934.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
     }
     #tbl {
-      width: 50%;
+      width: 65%;
       margin-left: auto;
       margin-right: auto;
     }
@@ -45,7 +48,7 @@
       margin-top: 60px;
     }
   </style>
-  <body>
+  <body onload="getData()">
     <h1>Employees Details</h1>
     <div id="nameInput" class="mx-auto input-group mb-3">
       <input
@@ -56,7 +59,19 @@
         aria-describedby="basic-addon2"
       />
       <div class="input-group-append">
-        <button class="btn btn-outline-warning" type="button">search</button>
+        <button class="btn btn-outline-warning" type="button">Find</button>
+      </div>
+    </div>
+    <div id="nameInput" class="mx-auto input-group mb-3">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="By employee last name"
+        aria-label="Recipient's username"
+        aria-describedby="basic-addon2"
+      />
+      <div class="input-group-append">
+        <button class="btn btn-outline-warning" type="button">Find</button>
       </div>
     </div>
     <div id="departmentInput" class="mx-auto input-group mb-3">
@@ -68,7 +83,7 @@
         aria-describedby="basic-addon2"
       />
       <div class="input-group-append">
-        <button class="btn btn-outline-warning" type="button">search</button>
+        <button class="btn btn-outline-warning" type="button">Find</button>
       </div>
     </div>
     <div class="table-wrapper-scroll-y my-custom-scrollbar">
@@ -82,99 +97,72 @@
             <th scope="col">Delete</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>Mark</td>
-            <td>2016</td>
-            <td>
-              <ul>
-                <li>Milk</li>
-                <li>Cheese</li>
-                <li>Blue cheese</li>
-                <li>Feta</li>
-                <a href="" class="link-warning">Add shift</a>
-              </ul>
-            </td>
-            <td><a href="" class="link-warning">Edit</a></td>
-            <td><a href="" class="link-warning">Delete</a></td>
-          </tr>
-          <tr>
-            <td>Jacob</td>
-            <td>2019</td>
-            <td>
-              <ul>
-                <li>Milk</li>
-                <li>Cheese</li>
-                <li>Blue cheese</li>
-                <li>Feta</li>
-                <a href="" class="link-warning">Add shift</a>
-              </ul>
-            </td>
-            <td><a href="" class="link-warning">Edit</a></td>
-            <td><a href="" class="link-warning">Delete</a></td>
-          </tr>
-          <tr>
-            <td>Jacob</td>
-            <td>2019</td>
-            <td>
-              <ul>
-                <li>Milk</li>
-                <li>Cheese</li>
-                <li>Blue cheese</li>
-                <li>Feta</li>
-                <a href="" class="link-warning">Add shift</a>
-              </ul>
-            </td>
-            <td><a href="" class="link-warning">Edit</a></td>
-            <td><a href="" class="link-warning">Delete</a></td>
-          </tr>
-          <tr>
-            <td>Jacob</td>
-            <td>2019</td>
-            <td>
-              <ul>
-                <li>Milk</li>
-                <li>Cheese</li>
-                <li>Blue cheese</li>
-                <li>Feta</li>
-                <a href="" class="link-warning">Add shift</a>
-              </ul>
-            </td>
-            <td><a href="" class="link-warning">Edit</a></td>
-            <td><a href="" class="link-warning">Delete</a></td>
-          </tr>
-          <tr>
-            <td>Jacob</td>
-            <td>2019</td>
-            <td>
-              <ul>
-                <li>Milk</li>
-                <li>Cheese</li>
-                <li>Blue cheese</li>
-                <li>Feta</li>
-                <a href="" class="link-warning">Add shift</a>
-              </ul>
-            </td>
-            <td><a href="" class="link-warning">Edit</a></td>
-            <td><a href="" class="link-warning">Delete</a></td>
-          </tr>
-          <tr>
-            <td>Jacob</td>
-            <td>2019</td>
-            <td>
-              <ul>
-                <li>Milk</li>
-                <li>Cheese</li>
-                <li>Blue cheese</li>
-                <li>Feta</li>
-                <a href="" class="link-warning">Add shift</a>
-              </ul>
-            </td>
-            <td><a href="" class="link-warning">Edit</a></td>
-            <td><a href="" class="link-warning">Delete</a></td>
-          </tr>
-        </tbody>
+        <tbody id="tBody"></tbody>
       </table>
     </div>
+
+    <script>
+      const getData = async () => {
+        let resp = await fetch("https://localhost:44364/api/employee");
+        let employees = await resp.json();
+
+        console.log(employees);
+
+        let body = document.getElementById("tBody");
+
+        employees.forEach((emp) => {
+          let tdFname = document.createElement("td");
+          tdFname.innerText = emp.First_name + " " + emp.Last_name;
+
+          let tdStart = document.createElement("td");
+          tdStart.innerText = emp.Start_work_year;
+
+          let tdShifts = document.createElement("td");
+          let ulShifts = document.createElement("ul");
+
+          emp.Shifts.forEach((shift) => {
+            let liShift = document.createElement("li");
+
+            liShift.innerText =
+              shift.Date +
+              ", " +
+              shift.Start_time +
+              ":00 - " +
+              shift.End_time +
+              ":00";
+
+            ulShifts.appendChild(liShift);
+          });
+
+          tdShifts.appendChild(ulShifts);
+
+          let tdEdit = document.createElement("td");
+          let linkEdit = document.createElement("a");
+          linkEdit.innerText = "Edit";
+
+          linkEdit.href = "EditEmployee.html?id=" + emp.ID;
+
+          tdEdit.appendChild(linkEdit);
+
+          let tdDelete = document.createElement("td");
+          let linkDelete = document.createElement("a");
+          linkDelete.innerText = "Delete";
+
+          linkDelete.href = "EditEmployee.html" + emp.ID;
+
+          tdDelete.appendChild(linkDelete);
+
+          let trObj = document.createElement("tr");
+
+          trObj.appendChild(tdFname);
+          trObj.appendChild(tdStart);
+          trObj.appendChild(tdShifts);
+          trObj.appendChild(tdEdit);
+          trObj.appendChild(tdDelete);
+
+          body.appendChild(trObj);
+        });
+      };
+    </script>
   </body>
 </html>
