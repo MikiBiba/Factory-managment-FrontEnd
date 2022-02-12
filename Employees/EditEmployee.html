@@ -84,9 +84,11 @@
         aria-label="Default select example"
       ></select>
     </div>
-    <button onclick="updateEmp()" type="submit" class="btn btn-warning">
-      Submit changes
-    </button>
+    <div id="container" class="form-group">
+      <button onclick="updateEmp()" type="submit" class="btn btn-warning">
+        Submit changes
+      </button>
+    </div>
     <script>
       const params = new URLSearchParams(location.search);
       let empid = params.get("id");
@@ -101,7 +103,7 @@
           First_name: fname.value,
           Last_name: lname.value,
           Start_work_year: startWY.value,
-          DepName: depName,
+          DepName: depName.value,
         };
 
         console.log(depName);

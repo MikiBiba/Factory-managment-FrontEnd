@@ -81,8 +81,6 @@
         let resp = await fetch("https://localhost:44364/api/department");
         let departments = await resp.json();
 
-        console.log(departments);
-
         let body = document.getElementById("tBody");
 
         departments.forEach((dep) => {
