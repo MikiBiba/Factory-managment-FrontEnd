@@ -49,45 +49,66 @@
   </style>
   <body>
     <h1>Add a new shift</h1>
-    <form>
-      <div id="container" class="form-group">
-        Select Employee
-        <select class="form-select" aria-label="Default select example">
-          <option selected>Avi</option>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
-        </select>
-      </div>
-      </div>
-      <div class="form-group">
-        <label for="shiftDate">Shift date</label>
-        <input
-          type="text"
-          class="form-control"
-          id="shiftDate"
-          placeholder="Enter Year"
-        />
-      </div>
-      <div class="form-group">
-        <label for="hourStart">Start</label>
-        <input
-          type="text"
-          class="form-control"
-          id="hourStart"
-          placeholder="Enter shift's start hour"
-        />
-      </div>
-      <div class="form-group">
-        <label for="hourEnd">End</label>
-        <input
-          type="text"
-          class="form-control"
-          id="hourEnd"
-          placeholder="Enter shift's end hour"
-        />
-      </div>
-      <button type="submit" class="btn btn-warning">Add shift</button>
-    </form>
+    <div class="form-group">
+      <label for="shiftDate">Enter Employee Full name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="EmpName"
+        placeholder="Enter Year"
+      />
+    </div>
+    <div class="form-group">
+      <label for="shiftDate">Shift date</label>
+      <input
+        type="text"
+        class="form-control"
+        id="shiftDate"
+        placeholder="Enter Year"
+      />
+    </div>
+    <div class="form-group">
+      <label for="hourStart">Start</label>
+      <input
+        type="text"
+        class="form-control"
+        id="hourStart"
+        placeholder="Enter shift's start hour"
+      />
+    </div>
+    <div class="form-group">
+      <label for="hourEnd">End</label>
+      <input
+        type="text"
+        class="form-control"
+        id="hourEnd"
+        placeholder="Enter shift's end hour"
+      />
+    </div>
+    <button onclick="update()" type="submit" class="btn btn-warning">
+      Add shift
+    </button>
+    <script>
+      function update() {
+        let empName = document.getElementById("empName");
+        let shiftDate = document.getElementById("shiftDate");
+        let hourStart = document.getElementById("hourStart");
+        let hourEnd = document.getElementById("hourEnd");
+
+         // update
+         let respUpdate = await fetch(
+          "https://localhost:44364/api/department/" + depid,
+          {
+            method: "PATCH",
+            body: JSON.stringify(obj),
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        let dataUpdate = await respUpdate.json();
+
+        alert("Updated!");
+      }
+      }
+    </script>
   </body>
 </html>

@@ -15,13 +15,11 @@
   <style>
     div {
       margin-top: 20px;
-    }
-
-    form {
       margin-left: auto;
       margin-right: 270px;
       width: 25%;
     }
+
     h1 {
       margin-top: 100px;
       margin-right: 800px;
@@ -47,48 +45,108 @@
       color: white;
     }
   </style>
-  <body>
+  <body onload="loadData()">
     <h1>Edit Employee</h1>
-    <form>
-      <div id="container" class="form-group">
-        <label for="exampleInputEmail1">First Name</label>
-        <input
-          type="text"
-          class="form-control"
-          id="exampleInputEmail1"
-          aria-describedby="emailHelp"
-          placeholder="Enter first name"
-        />
-      </div>
-      <div id="container" class="form-group">
-        <label for="exampleInputEmail1">Last Name</label>
-        <input
-          type="text"
-          class="form-control"
-          id="exampleInputEmail1"
-          aria-describedby="emailHelp"
-          placeholder="Enter last name"
-        />
-      </div>
-      <div class="form-group">
-        <label for="exampleInputPassword1">Start work year</label>
-        <input
-          type="text"
-          class="form-control"
-          id="exampleInputPassword1"
-          placeholder="Enter Year"
-        />
-      </div>
-      <div class="form-group">
-        <label for="exampleInputPassword1">Department</label>
-        <select class="form-select" aria-label="Default select example">
-          <option selected>Open this select menu</option>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
-        </select>
-      </div>
-      <button type="submit" class="btn btn-warning">Submit changes</button>
-    </form>
+    <div id="container" class="form-group">
+      <label for="exampleInputEmail1">First Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="fname"
+        aria-describedby="emailHelp"
+        placeholder="Enter first name"
+      />
+    </div>
+    <div id="container" class="form-group">
+      <label for="exampleInputEmail1">Last Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="lname"
+        aria-describedby="emailHelp"
+        placeholder="Enter last name"
+      />
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Start work year</label>
+      <input
+        type="text"
+        class="form-control"
+        id="startWY"
+        placeholder="Enter Year"
+      />
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Department</label>
+      <select
+        id="select"
+        class="form-select"
+        aria-label="Default select example"
+      ></select>
+    </div>
+    <button onclick="updateEmp()" type="submit" class="btn btn-warning">
+      Submit changes
+    </button>
+    <script>
+      const params = new URLSearchParams(location.search);
+      let empid = params.get("id");
+      let fname = document.getElementById("fname");
+      let lname = document.getElementById("lname");
+      let startWY = document.getElementById("startWY");
+
+      async function updateEmp() {
+        let depName =
+          document.getElementById("select").options[select.selectedIndex].text;
+        let obj = {
+          First_name: fname.value,
+          Last_name: lname.value,
+          Start_work_year: startWY.value,
+          DepName: depName,
+        };
+
+        console.log(depName);
+        // update
+        let respUpdate = await fetch(
+          "https://localhost:44364/api/employee/" + empid,
+          {
+            method: "PATCH",
+            body: JSON.stringify(obj),
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        let dataUpdate = await respUpdate.json();
+
+        console.log(obj);
+
+        alert("Updated!");
+      }
+
+      async function loadData() {
+        let resp = await fetch("https://localhost:44364/api/department");
+        let data = await resp.json();
+
+        let deps = data;
+
+        deps.forEach((dep) => {
+          let depOpt = document.createElement("option");
+          let select = document.getElementById("select");
+
+          depOpt.innerText = dep.Name;
+
+          select.appendChild(depOpt);
+        });
+
+        let respEmp = await fetch(
+          "https://localhost:44364/api/employee/" + empid
+        );
+        let dataEmp = await respEmp.json();
+
+        let emps = dataEmp;
+
+        fname.value = emps.First_name;
+        lname.value = emps.Last_name;
+        startWY.value = emps.Start_work_year;
+      }
+    </script>
   </body>
 </html>

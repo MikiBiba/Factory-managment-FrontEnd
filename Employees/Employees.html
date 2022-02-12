@@ -15,8 +15,9 @@
   </head>
 
   <style>
-    #nameInput,
-    #departmentInput {
+    #fnameDiv,
+    #depDiv,
+    #lnameDiv {
       width: 25%;
     }
     a {
@@ -51,8 +52,9 @@
   </style>
   <body onload="getData()">
     <h1>Employees Details</h1>
-    <div id="nameInput" class="mx-auto input-group mb-3">
+    <div id="fnameDiv" class="mx-auto input-group mb-3">
       <input
+        id="fnameInput"
         type="text"
         class="form-control"
         placeholder="By employee name"
@@ -60,11 +62,19 @@
         aria-describedby="basic-addon2"
       />
       <div class="input-group-append">
-        <button class="btn btn-outline-warning" type="button">Find</button>
+        <button
+          onclick="findByFname()"
+          id="fnameBtn"
+          class="btn btn-outline-warning"
+          type="button"
+        >
+          Find
+        </button>
       </div>
     </div>
-    <div id="nameInput" class="mx-auto input-group mb-3">
+    <div id="lnameDiv" class="mx-auto input-group mb-3">
       <input
+        id="lnameInput"
         type="text"
         class="form-control"
         placeholder="By employee last name"
@@ -72,11 +82,18 @@
         aria-describedby="basic-addon2"
       />
       <div class="input-group-append">
-        <button class="btn btn-outline-warning" type="button">Find</button>
+        <button
+          onclick="findByLname()"
+          class="btn btn-outline-warning"
+          type="button"
+        >
+          Find
+        </button>
       </div>
     </div>
-    <div id="departmentInput" class="mx-auto input-group mb-3">
+    <div id="depDiv" class="mx-auto input-group mb-3">
       <input
+        id="depInput"
         type="text"
         class="form-control"
         placeholder="By department name"
@@ -84,9 +101,16 @@
         aria-describedby="basic-addon2"
       />
       <div class="input-group-append">
-        <button class="btn btn-outline-warning" type="button">Find</button>
+        <button
+          onclick="findByDep()"
+          class="btn btn-outline-warning"
+          type="button"
+        >
+          Find
+        </button>
       </div>
     </div>
+
     <div class="table-wrapper-scroll-y my-custom-scrollbar">
       <table id="tbl" class="table table-dark overflow-auto">
         <thead>
@@ -103,13 +127,30 @@
     </div>
 
     <script>
+      let lnameInput = document.getElementById("lnameInput").value;
+      let depInput = document.getElementById("depInput").value;
+
+      function findByFname() {
+        let fnameInput = document.getElementById("fnameInput").value;
+        window.location = "SearchResultEmployee.html?fname=" + fnameInput;
+      }
+
+      const findByLname = () => {
+        let lnameInput = document.getElementById("lnameInput").value;
+        window.location = "SearchResultEmployee.html?lname=" + lnameInput;
+      };
+
+      const findByDep = () => {
+        let depInput = document.getElementById("depInput").value;
+
+        window.location = "SearchResultEmployee.html?dep=" + depInput;
+      };
+
       const getData = async () => {
         let resp = await fetch("https://localhost:44364/api/employee");
         let employees = await resp.json();
 
-        console.log(employees);
-
-        let body = document.getElementById("tBody");
+        let tbody = document.getElementById("tBody");
 
         employees.forEach((emp) => {
           let tdFname = document.createElement("td");
@@ -136,19 +177,18 @@
           });
 
           tdShifts.appendChild(ulShifts);
-
           let tdEdit = document.createElement("td");
           let linkEdit = document.createElement("a");
-          linkEdit.innerText = "Edit";
 
+          linkEdit.innerText = "Edit";
           linkEdit.href = "EditEmployee.html?id=" + emp.ID;
 
           tdEdit.appendChild(linkEdit);
 
           let tdDelete = document.createElement("td");
           let linkDelete = document.createElement("a");
-          linkDelete.innerText = "Delete";
 
+          linkDelete.innerText = "Delete";
           linkDelete.href = "EditEmployee.html" + emp.ID;
 
           tdDelete.appendChild(linkDelete);
@@ -161,7 +201,7 @@
           trObj.appendChild(tdEdit);
           trObj.appendChild(tdDelete);
 
-          body.appendChild(trObj);
+          tbody.appendChild(trObj);
         });
       };
     </script>

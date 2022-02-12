@@ -77,33 +77,48 @@
       </button>
     </div>
     <script>
-      let depid;
+      const params = new URLSearchParams(location.search);
+      let depid = params.get("id");
 
       async function update() {
+        let depName = document.getElementById("dep").value;
+        let managerName =
+          document.getElementById("select").options[select.selectedIndex].text;
+
         let obj = {
-          Name: document.getElementById("dep").value,
-          Manager: document.getElementById("manager").value,
+          Name: depName,
+          Manager: {},
         };
 
-        let fetchParams = {
-          method: "PUT",
-          body: JSON.stringify(obj),
-          headers: { "Content-Type": "application/json" },
-        };
-
-        let resp = await fetch(
-          "https://localhost:44356/api/student/" + userid,
-          fetchParams
-        );
+        let resp = await fetch("https://localhost:44364/api/employee");
         let data = await resp.json();
 
-        window.location.href = "Students.html";
+        let emps = data;
+
+        emps.forEach((emp) => {
+          if (emp.First_name + " " + emp.Last_name == managerName) {
+            obj.Manager = emp;
+            console.log(emp);
+          }
+        });
+
+        // update
+        let respUpdate = await fetch(
+          "https://localhost:44364/api/department/" + depid,
+          {
+            method: "PATCH",
+            body: JSON.stringify(obj),
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        let dataUpdate = await respUpdate.json();
+
+        alert("Updated!");
       }
 
-      async function loadData() {
-        const params = new URLSearchParams(location.search);
-        depid = params.get("id");
+      //Load data
 
+      async function loadData() {
         let resp = await fetch(
           "https://localhost:44364/api/department/" + depid
         );
@@ -121,8 +136,6 @@
         });
 
         document.getElementById("dep").value = data.Name;
-
-        // document.getElementById("manager").value = data.Manager.First_name;
       }
     </script>
   </body>

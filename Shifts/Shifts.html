@@ -62,16 +62,20 @@
         <tbody id="tBody"></tbody>
       </table>
       <div class="col text-center">
-        <button type="submit" class="btn btn-warning">Add Shift</button>
+        <button onclick="addShift()" type="submit" class="btn btn-warning">
+          Add Shift
+        </button>
       </div>
     </div>
 
     <script>
+      function addShift() {
+        window.location = "AddShift.html";
+      }
+
       const getData = async () => {
         let resp = await fetch("https://localhost:44364/api/shift");
         let shifts = await resp.json();
-
-        console.log(shifts);
 
         let body = document.getElementById("tBody");
 
@@ -88,7 +92,7 @@
           let tdEdit = document.createElement("td");
           let ulEdit = document.createElement("ul");
 
-          shift.Employees.forEach((emp) => {
+          shift.Employees.forEach((emp, i) => {
             let liEdit = document.createElement("li");
             let linkEdit = document.createElement("a");
 
@@ -98,7 +102,7 @@
             ulEdit.appendChild(liEdit);
 
             linkEdit.href =
-              "./Employees.EditEmployee.html?id=" + shift.Employees.ID;
+              "../Employees/EditEmployee.html?id=" + shift.Employees[i].ID;
           });
 
           tdEdit.appendChild(ulEdit);

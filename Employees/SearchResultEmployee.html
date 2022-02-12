@@ -13,11 +13,6 @@
     <title>Document</title>
   </head>
 
-  <script>
-    function backTable() {
-      window.location.href = "Employees.html";
-    }
-  </script>
   <style>
     div {
       margin-top: 20px;
@@ -55,7 +50,7 @@
       margin-right: auto;
     }
   </style>
-  <body>
+  <body onload="getData()">
     <h1>Employee details</h1>
     <table id="tbl" class="table table-dark overflow-auto">
       <thead>
@@ -74,5 +69,60 @@
         Back to table
       </button>
     </div>
+
+    <script>
+      function backTable() {
+        window.location.href = "Employees.html";
+      }
+
+      async function getData() {
+        const params = new URLSearchParams(location.search);
+        fname = params.get("fname");
+        lname = params.get("lname");
+        depname = params.get("depname");
+
+        let resp = await fetch("https://localhost:44364/api/employee");
+        let data = await resp.json();
+
+        data.forEach((item) => {
+          if (fname !== null) {
+            if (fname == item.First_name) {
+              // let tr = document.createElement("tr");
+              // let tdFullName = document.createElement("td");
+              // let tdStartWorkYear = document.createElement("td");
+              // let tdShifts = document.createElement("td");
+              // let tdEdit = document.createElement("td");
+              // let tdDelete = document.createElement("td");
+              // tdFullName.innerText = item.First_name + item.Last_name;
+              // tdStartWorkYear.innerText = item.tdStartWorkYear;
+              // let ulShifts = document.createElement("ul");
+              // emp.Shifts.forEach((shift) => {
+              //   let liShift = document.createElement("li");
+              //   liShift.innerText =
+              //     shift.Date +
+              //     ", " +
+              //     shift.Start_time +
+              //     ":00 - " +
+              //     shift.End_time +
+              //     ":00";
+              //   ulShifts.appendChild(liShift);
+              // });
+            }
+          }
+          if (lname !== null) {
+            if (lname == item.Last_name) {
+              conosle.log(item);
+            }
+          }
+          if (depname !== null) {
+            item.Departments.forEach((dep) => {
+              if (dep.Name == depname) {
+                conosle.log(dep);
+              }
+            });
+          }
+        });
+      }
+    </script>
   </body>
 </html>
