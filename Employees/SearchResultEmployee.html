@@ -23,6 +23,10 @@
       margin-right: 270px;
       width: 25%;
     }
+    a {
+      color: #fad643;
+    }
+
     h1 {
       color: #fad643 !important;
       text-align: center;
@@ -50,7 +54,7 @@
       margin-right: auto;
     }
   </style>
-  <body onload="getData()">
+  <body id="tBody" onload="getData()">
     <h1>Employee details</h1>
     <table id="tbl" class="table table-dark overflow-auto">
       <thead>
@@ -62,7 +66,7 @@
           <th scope="col">Delete</th>
         </tr>
       </thead>
-      <tbody id="tBody"></tbody>
+      <tbody id="tbody"></tbody>
     </table>
     <div class="col text-center">
       <button onclick="backTable()" type="submit" class="btn btn-warning">
@@ -73,6 +77,60 @@
     <script>
       function backTable() {
         window.location.href = "Employees.html";
+      }
+
+      let tbody = document.getElementById("tbody");
+
+      function displayEmpData(item) {
+        let tdFname = document.createElement("td");
+        tdFname.innerText = item.First_name + " " + item.Last_name;
+
+        let tdStart = document.createElement("td");
+        tdStart.innerText = item.Start_work_year;
+
+        let tdShifts = document.createElement("td");
+        let ulShifts = document.createElement("ul");
+
+        item.Shifts.forEach((shift) => {
+          let liShift = document.createElement("li");
+
+          liShift.innerText =
+            shift.Date +
+            ", " +
+            shift.Start_time +
+            ":00 - " +
+            shift.End_time +
+            ":00";
+
+          ulShifts.appendChild(liShift);
+        });
+
+        tdShifts.appendChild(ulShifts);
+        let tdEdit = document.createElement("td");
+        let linkEdit = document.createElement("a");
+
+        linkEdit.innerText = "Edit";
+        linkEdit.href = "EditEmployee.html?id=" + item.ID;
+
+        tdEdit.appendChild(linkEdit);
+
+        let tdDelete = document.createElement("td");
+        let linkDelete = document.createElement("a");
+
+        linkDelete.innerText = "Delete";
+        linkDelete.href = "EditEmployee.html" + item.ID;
+
+        tdDelete.appendChild(linkDelete);
+
+        let trObj = document.createElement("tr");
+
+        trObj.appendChild(tdFname);
+        trObj.appendChild(tdStart);
+        trObj.appendChild(tdShifts);
+        trObj.appendChild(tdEdit);
+        trObj.appendChild(tdDelete);
+
+        tbody.appendChild(trObj);
       }
 
       async function getData() {
@@ -87,17 +145,18 @@
         data.forEach((item) => {
           if (fname !== null) {
             if (fname == item.First_name) {
+              displayEmpData(item);
             }
           }
           if (lname !== null) {
             if (lname == item.Last_name) {
-              conosle.log(item);
+              displayEmpData(item);
             }
           }
           if (depname !== null) {
             item.Departments.forEach((dep) => {
               if (dep.Name == depname) {
-                conosle.log(dep);
+                displayEmpData(item);
               }
             });
           }

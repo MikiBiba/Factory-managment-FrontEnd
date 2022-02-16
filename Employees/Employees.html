@@ -130,6 +130,19 @@
       let lnameInput = document.getElementById("lnameInput").value;
       let depInput = document.getElementById("depInput").value;
 
+      async function deleteEmp(id) {
+        let fetchParams = {
+          method: "DELETE",
+        };
+
+        let resp = await fetch(
+          "https://localhost:44364/api/employee/" + id,
+          fetchParams
+        );
+        let status = await resp.json();
+        alert(status);
+      }
+
       function findByFname() {
         let fnameInput = document.getElementById("fnameInput").value;
         window.location = "SearchResultEmployee.html?fname=" + fnameInput;
@@ -143,7 +156,7 @@
       const findByDep = () => {
         let depInput = document.getElementById("depInput").value;
 
-        window.location = "SearchResultEmployee.html?dep=" + depInput;
+        window.location = "SearchResultEmployee.html?depname=" + depInput;
       };
 
       const getData = async () => {
@@ -189,7 +202,7 @@
           let linkDelete = document.createElement("a");
 
           linkDelete.innerText = "Delete";
-          linkDelete.href = "EditEmployee.html" + emp.ID;
+          linkDelete.href = "javascript:deleteEmp( " + emp.ID + ")";
 
           tdDelete.appendChild(linkDelete);
 

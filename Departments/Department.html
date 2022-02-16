@@ -74,6 +74,19 @@
     </div>
 
     <script>
+      async function deleteDep(id) {
+        let fetchParams = {
+          method: "DELETE",
+        };
+
+        let resp = await fetch(
+          "https://localhost:44364/api/department/" + id,
+          fetchParams
+        );
+        let status = await resp.json();
+        alert(status);
+      }
+
       function addDepartment() {
         window.location.href = "NewDepartment.html";
       }
@@ -102,7 +115,7 @@
 
           let linkDelete = document.createElement("a");
           linkDelete.innerText = "Delete";
-          linkDelete.href = "EditDepartment.html";
+          linkDelete.href = "javascript:deleteDep( " + dep.ID + ")";
 
           tdDelete.appendChild(linkDelete);
           let trObj = document.createElement("tr");
