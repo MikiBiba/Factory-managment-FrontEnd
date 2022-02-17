@@ -15,16 +15,17 @@
   <style>
     div {
       margin-top: 20px;
-    }
-    * {
-      color: #eee9d5 !important;
-    }
-
-    form {
       margin-left: auto;
       margin-right: 200px;
       width: 25%;
     }
+    * {
+      color: #eee9d5 !important;
+    }
+    input {
+      color: black !important;
+    }
+
     h1 {
       margin-top: 100px;
       margin-right: 800px;
@@ -47,57 +48,98 @@
       color: black !important;
     }
   </style>
-  <body>
+  <body onload="loadData()">
     <h1>Add shift to an employee</h1>
-    <form>
-      <div id="container" class="form-group">
-        <label for="employeeFname">Employee First Name</label>
-        <input
-          type="email"
-          class="form-control"
-          id="employeeFname"
-          aria-describedby="emailHelp"
-          placeholder="Enter first name"
-        />
-      </div>
-      <div id="container" class="form-group">
-        <label for="employeeLname">Emplpyee Last Name</label>
-        <input
-          type="text"
-          class="form-control"
-          id="employeeLname"
-          aria-describedby="emailHelp"
-          placeholder="Enter last name"
-        />
-      </div>
-      <div class="form-group">
-        <label for="shiftDate">Shift date</label>
-        <input
-          type="text"
-          class="form-control"
-          id="shiftDate"
-          placeholder="Enter Year"
-        />
-      </div>
-      <div class="form-group">
-        <label for="hourStart">Start</label>
-        <input
-          type="text"
-          class="form-control"
-          id="hourStart"
-          placeholder="Enter shift's start hour"
-        />
-      </div>
-      <div class="form-group">
-        <label for="hourEnd">End</label>
-        <input
-          type="text"
-          class="form-control"
-          id="hourEnd"
-          placeholder="Enter shift's end hour"
-        />
-      </div>
-      <button type="submit" class="btn btn-warning">Add shift</button>
-    </form>
+    <div id="container" class="form-group">
+      <label for="employeeFname">Employee First Name</label>
+      <input
+        type="email"
+        class="form-control"
+        id="employeeFname"
+        aria-describedby="emailHelp"
+        placeholder="Enter first name"
+      />
+    </div>
+    <div id="container" class="form-group">
+      <label for="employeeLname">Emplpyee Last Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="employeeLname"
+        aria-describedby="emailHelp"
+        placeholder="Enter last name"
+      />
+    </div>
+    <div class="form-group">
+      <label for="shiftDate">Shift date</label>
+      <input
+        type="text"
+        class="form-control"
+        id="shiftDate"
+        placeholder="Enter Shift's Date"
+      />
+    </div>
+    <div class="form-group">
+      <label for="hourStart">Start</label>
+      <input
+        type="text"
+        class="form-control"
+        id="hourStart"
+        placeholder="Enter shift's start hour"
+      />
+    </div>
+    <div class="form-group">
+      <label for="hourEnd">End</label>
+      <input
+        type="text"
+        class="form-control"
+        id="hourEnd"
+        placeholder="Enter shift's end hour"
+      />
+    </div>
+    <div id="container" class="form-group">
+      <button onclick="updateEmp()" type="submit" class="btn btn-warning">
+        Create new shift
+      </button>
+    </div>
   </body>
+  <script>
+    const params = new URLSearchParams(location.search);
+    let empid = params.get("id");
+    let fname = document.getElementById("employeeFname");
+    let lname = document.getElementById("employeeLname");
+    let shiftDate = document.getElementById("shiftDate");
+    let hourStart = document.getElementById("hourStart");
+    let hourEnd = document.getElementById("hourEnd");
+
+    async function updateEmp() {
+      let obj = {
+        Date: shiftDate.value,
+        Start_time: parseInt(hourStart.value),
+        End_time: parseInt(hourEnd.value),
+        EmployeeID: empid,
+      };
+      // update shift
+      let respUpdate = await fetch("https://localhost:44364/api/shift", {
+        method: "POST",
+        body: JSON.stringify(obj),
+        headers: { "Content-Type": "application/json" },
+      });
+      let dataUpdate = await respUpdate.json();
+
+      alert("Updated!");
+    }
+
+    async function loadData() {
+      let respEmp = await fetch(
+        "https://localhost:44364/api/employee/" + empid
+      );
+      let dataEmp = await respEmp.json();
+
+      let emps = dataEmp;
+
+      fname.value = emps.First_name;
+      lname.value = emps.Last_name;
+    }
+  </script>
 </html>

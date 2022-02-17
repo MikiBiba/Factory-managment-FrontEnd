@@ -103,10 +103,10 @@
           First_name: fname.value,
           Last_name: lname.value,
           Start_work_year: startWY.value,
-          DepName: depName.value,
+          DepName: depName,
         };
 
-        console.log(depName);
+        console.log(obj);
         // update
         let respUpdate = await fetch(
           "https://localhost:44364/api/employee/" + empid,

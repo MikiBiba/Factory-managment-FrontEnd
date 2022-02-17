@@ -107,11 +107,11 @@
             users[i].User_name == userName.value &&
             users[i].Password == userPass.value
           ) {
-            window.location.href = "HomePage.html";
-          } else {
-            alert("Incorrect username or password");
+            // window.location.href = "HomePage.html";
+            console.log(users[i]);
           }
-          break;
+          // alert("Incorrect username or password");
+          console.log(users[i]);
         }
       }
     </script>
