@@ -55,8 +55,8 @@
 
                       <div class="form-outline mb-4">
                         <input
-                          type="email"
-                          id="form2Example17"
+                          type="text"
+                          id="userName"
                           class="form-control form-control-lg"
                         />
                         <label class="form-label" for="form2Example17"
@@ -67,23 +67,24 @@
                       <div class="form-outline mb-4">
                         <input
                           type="password"
-                          id="form2Example27"
+                          id="userPass"
                           class="form-control form-control-lg"
                         />
                         <label class="form-label" for="form2Example27"
                           >Password</label
                         >
                       </div>
-
-                      <div class="pt-1 mb-4">
-                        <button
-                          class="btn btn-dark btn-lg btn-block"
-                          type="button"
-                        >
-                          Login
-                        </button>
-                      </div>
                     </form>
+                    <div class="pt-1 mb-4">
+                      <button
+                        id="btn"
+                        class="btn btn-dark btn-lg btn-block"
+                        type="button"
+                        onclick="loginUser()"
+                      >
+                        Login
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -92,5 +93,27 @@
         </div>
       </div>
     </section>
+    <script>
+      let loginBtn = document.getElementById("btn");
+      let userPass = document.getElementById("userPass");
+      let userName = document.getElementById("userName");
+
+      async function loginUser() {
+        let resp = await fetch("https://localhost:44364/api/user");
+        let users = await resp.json();
+
+        for (let i = 0; i < users.length; i++) {
+          if (
+            users[i].User_name == userName.value &&
+            users[i].Password == userPass.value
+          ) {
+            window.location.href = "HomePage.html";
+          } else {
+            alert("Incorrect username or password");
+          }
+          break;
+        }
+      }
+    </script>
   </body>
 </html>
