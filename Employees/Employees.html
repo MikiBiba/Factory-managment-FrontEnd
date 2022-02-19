@@ -28,6 +28,7 @@
       color: #fad643;
       text-align: center;
       margin-bottom: 30px;
+      margin-top: 30px;
     }
     body {
       background-size: cover;
@@ -48,9 +49,30 @@
     .table-wrapper-scroll-y {
       display: block;
       margin-top: 60px;
+      height: 400px;
+    }
+    nav {
+      color: #fad643;
     }
   </style>
   <body onload="getData()">
+    <nav class="navbar navbar-dark bg-dark">
+      <!-- Navbar content -->
+      <a href="#" class="navbar-brand">
+        <!-- Logo Image -->
+        <img
+          src="https://www.rawshorts.com/freeicons/wp-content/uploads/2017/01/yellow_re_buildingspict02_1484336486.png"
+          width="40"
+          height="35"
+          alt=""
+          class="d-inline-block align-middle mr-2"
+        />
+        <!-- Logo Text -->
+        <span class="text-uppercase font-weight-bold">Factory managment</span>
+      </a>
+      <span id="spanName"></span>
+      <span id="spanActions">num of actions 9\12</span>
+    </nav>
     <h1>Employees Details</h1>
     <div id="fnameDiv" class="mx-auto input-group mb-3">
       <input

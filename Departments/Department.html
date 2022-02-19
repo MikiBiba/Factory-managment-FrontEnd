@@ -51,8 +51,28 @@
       margin-top: 40px;
       margin-bottom: 20px;
     }
+    nav {
+      color: #fad643;
+    }
   </style>
   <body onload="getData()">
+    <nav class="navbar navbar-dark bg-dark">
+      <!-- Navbar content -->
+      <a href="#" class="navbar-brand">
+        <!-- Logo Image -->
+        <img
+          src="https://www.rawshorts.com/freeicons/wp-content/uploads/2017/01/yellow_re_buildingspict02_1484336486.png"
+          width="40"
+          height="35"
+          alt=""
+          class="d-inline-block align-middle mr-2"
+        />
+        <!-- Logo Text -->
+        <span class="text-uppercase font-weight-bold">Factory managment</span>
+      </a>
+      <span id="spanName"></span>
+      <span id="spanActions">9 Actions left</span>
+    </nav>
     <h1>Departments</h1>
     <div class="table-wrapper-scroll-y my-custom-scrollbar">
       <table id="tbl" class="table table-dark overflow-auto">
@@ -74,23 +94,51 @@
     </div>
 
     <script>
-      async function deleteDep(id) {
-        let fetchParams = {
-          method: "DELETE",
-        };
+      //Getting the username from the URL
+      const params = new URLSearchParams(location.search);
+      let username = params.get("username");
 
-        let resp = await fetch(
-          "https://localhost:44364/api/department/" + id,
-          fetchParams
-        );
-        let status = await resp.json();
-        alert(status);
+      let spanName = document.getElementById("spanName");
+
+      spanName.innerText = `Hello, ${username}`;
+
+      function userAction(currentUser) {
+        let str = sessionStorage["users"];
+        let users = JSON.parse(str);
+
+        let user = users.find((x) => x.User_name == currentUser);
+
+        if (user.Num_of_actions > 0) {
+          user.Num_of_actions -= 1;
+          sessionStorage.setItem("users", JSON.stringify(users));
+          return "Valid";
+        } else {
+          alert("The number of user actions is over");
+          window.location.href = "./LoginPage.html";
+          return "Invalid";
+        }
+      }
+
+      async function deleteDep(id) {
+        if (userAction(username) == "Valid") {
+          let fetchParams = {
+            method: "DELETE",
+          };
+          let resp = await fetch(
+            "https://localhost:44364/api/department/" + id,
+            fetchParams
+          );
+          let status = await resp.json();
+          alert(status);
+        }
       }
 
       function addDepartment() {
-        window.location.href = "NewDepartment.html";
+        window.location.href = "NewDepartment.html?username=" + username;
       }
       const getData = async () => {
+        let users = JSON.parse(sessionStorage.getItem("users"));
+
         let resp = await fetch("https://localhost:44364/api/department");
         let departments = await resp.json();
 
@@ -107,7 +155,8 @@
 
           let linkEdit = document.createElement("a");
           linkEdit.innerText = "Edit";
-          linkEdit.href = "EditDepartment.html?id=" + dep.ID;
+          linkEdit.href =
+            "EditDepartment.html?id=" + dep.ID + "&username=" + username;
 
           tdEdit.appendChild(linkEdit);
 

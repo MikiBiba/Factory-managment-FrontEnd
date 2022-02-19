@@ -18,11 +18,17 @@
       margin: 0;
       padding: 0;
     }
+    a {
+      color: #ffe169;
+    }
     h1 {
       color: #ffe169;
       text-align: center;
       margin-bottom: 50px;
       margin-top: 30px;
+    }
+    nav {
+      color: #fad643;
     }
     body {
       background-color: black;
@@ -32,6 +38,9 @@
     div {
       margin-right: auto !important;
       margin-left: auto !important;
+    }
+    button:hover {
+      background-color: #ffe169 !important;
     }
 
     button {
@@ -43,7 +52,25 @@
       margin: 90px;
     }
   </style>
-  <body>
+  <body onload="getUsersData()">
+    <nav class="navbar navbar-dark bg-dark">
+      <!-- Navbar content -->
+      <a href="#" class="navbar-brand">
+        <!-- Logo Image -->
+        <img
+          src="https://www.rawshorts.com/freeicons/wp-content/uploads/2017/01/yellow_re_buildingspict02_1484336486.png"
+          width="40"
+          height="35"
+          alt=""
+          class="d-inline-block align-middle mr-2"
+        />
+        <!-- Logo Text -->
+        <span class="text-uppercase font-weight-bold">Factory managment</span>
+      </a>
+      <span id="spanName"></span>
+      <span id="spanActions">7 Actions left</span>
+    </nav>
+
     <h1>Home page</h1>
 
     <div class="d-flex justify-content-center">
@@ -76,15 +103,51 @@
       let employeeBtn = document.getElementById("employeeBtn");
       let departmentBtn = document.getElementById("departmentBtn");
       let shiftBtn = document.getElementById("shiftBtn");
+      let spanName = document.getElementById("spanName");
+
+      const params = new URLSearchParams(location.search);
+      let username = params.get("username");
+
+      spanName.innerText = "Hello, " + username;
+
+      function userAction(currentUser) {
+        let str = sessionStorage["users"];
+        let users = JSON.parse(str);
+
+        let user = users.find((x) => x.User_name == currentUser);
+
+        if (user.Num_of_actions > 0) {
+          user.Num_of_actions -= 1;
+          sessionStorage.setItem("users", JSON.stringify(users));
+        } else {
+          alert("The number of user actions is over");
+          console.log(user.Num_of_actions);
+        }
+      }
 
       function employeeNev() {
-        window.location.href = "./Employees/Employees.html";
+        userAction(username);
+
+        window.location.href =
+          "./Employees/Employees.html?username=" + username;
       }
       function departmentNev() {
-        window.location.href = "./Departments/Department.html";
+        userAction(username);
+
+        window.location.href =
+          "./Departments/Department.html?username=" + username;
       }
       function shiftNev() {
-        window.location.href = "./Shifts/shifts.html";
+        userAction(username);
+
+        window.location.href = "./Shifts/shifts.html?username=" + usernmae;
+      }
+
+      async function getUsersData() {
+        let resp = await fetch("https://localhost:44364/api/user");
+        let users = await resp.json();
+
+        sessionStorage.setItem("users", JSON.stringify(users));
       }
     </script>
   </body>
