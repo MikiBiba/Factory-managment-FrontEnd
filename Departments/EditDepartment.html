@@ -29,7 +29,7 @@
       width: 25%;
     }
     h1 {
-      margin-top: 100px;
+      margin-top: 50px;
       margin-right: 800px;
       color: #fad643 !important;
       text-align: center;
@@ -70,6 +70,7 @@
       </a>
       <span id="spanName"></span>
       <span id="spanActions">num of actions 9\12</span>
+      <span id="spanLogOut"><a href="../LoginPage.html">Log Out</a></span>
     </nav>
     <h1>Edit an exsiting department</h1>
     <div id="form" class="form-group">
@@ -105,40 +106,60 @@
 
       spanName.innerText = "Hello, " + username;
 
+      function userAction(currentUser) {
+        let str = sessionStorage["users"];
+        let users = JSON.parse(str);
+
+        let user = users.find((x) => x.User_name == currentUser);
+
+        if (user.Num_of_actions > 0) {
+          user.Num_of_actions -= 1;
+          sessionStorage.setItem("users", JSON.stringify(users));
+          return "Valid";
+        } else {
+          alert("The number of user actions is over");
+          window.location.href = "../LoginPage.html";
+          return "Invalid";
+        }
+      }
+
       async function update() {
-        let depName = document.getElementById("dep").value;
-        let managerName =
-          document.getElementById("select").options[select.selectedIndex].text;
+        if (userAction(username) == "Valid") {
+          let depName = document.getElementById("dep").value;
+          let managerName =
+            document.getElementById("select").options[select.selectedIndex]
+              .text;
 
-        let obj = {
-          Name: depName,
-          Manager: {},
-        };
+          let obj = {
+            Name: depName,
+            Manager: {},
+          };
 
-        let resp = await fetch("https://localhost:44364/api/employee");
-        let data = await resp.json();
+          let resp = await fetch("https://localhost:44364/api/employee");
+          let data = await resp.json();
 
-        let emps = data;
+          let emps = data;
 
-        emps.forEach((emp) => {
-          if (emp.First_name + " " + emp.Last_name == managerName) {
-            obj.Manager = emp;
-            console.log(emp);
-          }
-        });
+          emps.forEach((emp) => {
+            if (emp.First_name + " " + emp.Last_name == managerName) {
+              obj.Manager = emp;
+              console.log(emp);
+            }
+          });
 
-        // update
-        let respUpdate = await fetch(
-          "https://localhost:44364/api/department/" + depid,
-          {
-            method: "PATCH",
-            body: JSON.stringify(obj),
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        let dataUpdate = await respUpdate.json();
+          // update
+          let respUpdate = await fetch(
+            "https://localhost:44364/api/department/" + depid,
+            {
+              method: "PATCH",
+              body: JSON.stringify(obj),
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+          let dataUpdate = await respUpdate.json();
 
-        alert("Updated!");
+          alert("Updated!");
+        }
       }
 
       //Load data

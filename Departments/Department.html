@@ -21,7 +21,7 @@
     h1 {
       color: #fad643;
       text-align: center;
-      margin-bottom: 20px;
+      margin-top: 50px;
     }
     body {
       background-size: cover;
@@ -33,7 +33,6 @@
       width: 50%;
       margin-left: auto;
       margin-right: auto;
-      margin-top: 30px;
     }
     .my-custom-scrollbar {
       position: relative;
@@ -72,6 +71,7 @@
       </a>
       <span id="spanName"></span>
       <span id="spanActions">9 Actions left</span>
+      <span id="spanLogOut"><a href="../LoginPage.html">Log Out</a></span>
     </nav>
     <h1>Departments</h1>
     <div class="table-wrapper-scroll-y my-custom-scrollbar">
@@ -114,7 +114,7 @@
           return "Valid";
         } else {
           alert("The number of user actions is over");
-          window.location.href = "./LoginPage.html";
+          window.location.href = "../LoginPage.html";
           return "Invalid";
         }
       }
@@ -136,6 +136,7 @@
       function addDepartment() {
         window.location.href = "NewDepartment.html?username=" + username;
       }
+
       const getData = async () => {
         let users = JSON.parse(sessionStorage.getItem("users"));
 

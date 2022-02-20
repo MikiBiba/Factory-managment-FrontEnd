@@ -67,6 +67,7 @@
       </a>
       <span id="spanName"></span>
       <span id="spanActions">num of actions 9\12</span>
+      <span id="spanLogOut"><a href="../LoginPage.html">Log Out</a></span>
     </nav>
     <h1>Shifts table</h1>
     <div class="table-wrapper-scroll-y my-custom-scrollbar">
@@ -89,6 +90,30 @@
     </div>
 
     <script>
+      //Getting the username from the URL
+      const params = new URLSearchParams(location.search);
+      let username = params.get("username");
+
+      let spanName = document.getElementById("spanName");
+      spanName.innerText = `Hello, ${username}`;
+
+      function userAction(currentUser) {
+        let str = sessionStorage["users"];
+        let users = JSON.parse(str);
+
+        let user = users.find((x) => x.User_name == currentUser);
+
+        if (user.Num_of_actions > 0) {
+          user.Num_of_actions -= 1;
+          sessionStorage.setItem("users", JSON.stringify(users));
+          return "Valid";
+        } else {
+          alert("The number of user actions is over");
+          window.location.href = "../LoginPage.html";
+          return "Invalid";
+        }
+      }
+
       function addShift() {
         window.location = "AddShift.html";
       }
@@ -122,7 +147,10 @@
             ulEdit.appendChild(liEdit);
 
             linkEdit.href =
-              "../Employees/EditEmployee.html?id=" + shift.Employees[i].ID;
+              "../Employees/EditEmployee.html?id=" +
+              shift.Employees[i].ID +
+              "&username=" +
+              username;
           });
 
           tdEdit.appendChild(ulEdit);

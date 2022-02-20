@@ -72,6 +72,7 @@
       </a>
       <span id="spanName"></span>
       <span id="spanActions">num of actions 9\12</span>
+      <span id="spanLogOut"><a href="../LoginPage.html">Log Out</a></span>
     </nav>
     <h1>Employees Details</h1>
     <div id="fnameDiv" class="mx-auto input-group mb-3">
@@ -152,17 +153,43 @@
       let lnameInput = document.getElementById("lnameInput").value;
       let depInput = document.getElementById("depInput").value;
 
-      async function deleteEmp(id) {
-        let fetchParams = {
-          method: "DELETE",
-        };
+      //Getting the username from the URL
+      const params = new URLSearchParams(location.search);
+      let username = params.get("username");
 
-        let resp = await fetch(
-          "https://localhost:44364/api/employee/" + id,
-          fetchParams
-        );
-        let status = await resp.json();
-        alert(status);
+      let spanName = document.getElementById("spanName");
+      spanName.innerText = `Hello, ${username}`;
+
+      function userAction(currentUser) {
+        let str = sessionStorage["users"];
+        let users = JSON.parse(str);
+
+        let user = users.find((x) => x.User_name == currentUser);
+
+        if (user.Num_of_actions > 0) {
+          user.Num_of_actions -= 1;
+          sessionStorage.setItem("users", JSON.stringify(users));
+          return "Valid";
+        } else {
+          alert("The number of user actions is over");
+          window.location.href = "../LoginPage.html";
+          return "Invalid";
+        }
+      }
+
+      async function deleteEmp(id) {
+        if (userAction(username) == "Valid") {
+          let fetchParams = {
+            method: "DELETE",
+          };
+
+          let resp = await fetch(
+            "https://localhost:44364/api/employee/" + id,
+            fetchParams
+          );
+          let status = await resp.json();
+          alert(status);
+        }
       }
 
       function findByFname() {
@@ -223,7 +250,8 @@
           let linkEdit = document.createElement("a");
 
           linkEdit.innerText = "Edit";
-          linkEdit.href = "EditEmployee.html?id=" + emp.ID;
+          linkEdit.href =
+            "EditEmployee.html?id=" + emp.ID + "&username=" + username;
 
           tdEdit.appendChild(linkEdit);
 

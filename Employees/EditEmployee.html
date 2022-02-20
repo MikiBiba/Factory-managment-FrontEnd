@@ -65,6 +65,7 @@
       </a>
       <span id="spanName"></span>
       <span id="spanActions">num of actions 9\12</span>
+      <span id="spanLogOut"><a href="../LoginPage.html">Log Out</a></span>
     </nav>
     <h1>Edit Employee</h1>
     <div id="container" class="form-group">
@@ -112,35 +113,59 @@
     <script>
       const params = new URLSearchParams(location.search);
       let empid = params.get("id");
+      let username = params.get("username");
       let fname = document.getElementById("fname");
       let lname = document.getElementById("lname");
       let startWY = document.getElementById("startWY");
 
+      let spanName = document.getElementById("spanName");
+      spanName.innerText = `Hello, ${username}`;
+
+      function userAction(currentUser) {
+        let str = sessionStorage["users"];
+        let users = JSON.parse(str);
+
+        let user = users.find((x) => x.User_name == currentUser);
+
+        if (user.Num_of_actions > 0) {
+          user.Num_of_actions -= 1;
+          sessionStorage.setItem("users", JSON.stringify(users));
+          return "Valid";
+        } else {
+          alert("The number of user actions is over");
+          window.location.href = "../LoginPage.html";
+          return "Invalid";
+        }
+      }
+
       async function updateEmp() {
-        let depName =
-          document.getElementById("select").options[select.selectedIndex].text;
-        let obj = {
-          First_name: fname.value,
-          Last_name: lname.value,
-          Start_work_year: startWY.value,
-          DepName: depName,
-        };
+        if (userAction(username) == "Valid") {
+          let depName =
+            document.getElementById("select").options[select.selectedIndex]
+              .text;
+          let obj = {
+            First_name: fname.value,
+            Last_name: lname.value,
+            Start_work_year: startWY.value,
+            DepName: depName,
+          };
 
-        console.log(obj);
-        // update
-        let respUpdate = await fetch(
-          "https://localhost:44364/api/employee/" + empid,
-          {
-            method: "PATCH",
-            body: JSON.stringify(obj),
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        let dataUpdate = await respUpdate.json();
+          console.log(obj);
+          // update
+          let respUpdate = await fetch(
+            "https://localhost:44364/api/employee/" + empid,
+            {
+              method: "PATCH",
+              body: JSON.stringify(obj),
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+          let dataUpdate = await respUpdate.json();
 
-        console.log(obj);
+          console.log(obj);
 
-        alert("Updated!");
+          alert("Updated!");
+        }
       }
 
       async function loadData() {
