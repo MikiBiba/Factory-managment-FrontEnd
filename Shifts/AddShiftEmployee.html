@@ -132,23 +132,45 @@
     let shiftDate = document.getElementById("shiftDate");
     let hourStart = document.getElementById("hourStart");
     let hourEnd = document.getElementById("hourEnd");
+    let username = params.get("username");
+
+    spanName.innerText = "Hello, " + username;
+
+    function userAction(currentUser) {
+      let str = sessionStorage["users"];
+      let users = JSON.parse(str);
+
+      let user = users.find((x) => x.User_name == currentUser);
+
+      if (user.Num_of_actions > 0) {
+        user.Num_of_actions -= 1;
+        sessionStorage.setItem("users", JSON.stringify(users));
+        return "Valid";
+      } else {
+        alert("The number of user actions is over");
+        window.location.href = "../LoginPage.html";
+        return "Invalid";
+      }
+    }
 
     async function updateEmp() {
-      let obj = {
-        Date: shiftDate.value,
-        Start_time: parseInt(hourStart.value),
-        End_time: parseInt(hourEnd.value),
-        EmployeeID: empid,
-      };
-      // update shift
-      let respUpdate = await fetch("https://localhost:44364/api/shift", {
-        method: "POST",
-        body: JSON.stringify(obj),
-        headers: { "Content-Type": "application/json" },
-      });
-      let dataUpdate = await respUpdate.json();
+      if (userAction(username) == "Valid") {
+        let obj = {
+          Date: shiftDate.value,
+          Start_time: parseInt(hourStart.value),
+          End_time: parseInt(hourEnd.value),
+          EmployeeID: empid,
+        };
+        // update shift
+        let respUpdate = await fetch("https://localhost:44364/api/shift", {
+          method: "POST",
+          body: JSON.stringify(obj),
+          headers: { "Content-Type": "application/json" },
+        });
+        let dataUpdate = await respUpdate.json();
 
-      alert("Updated!");
+        alert("Updated!");
+      }
     }
 
     async function loadData() {

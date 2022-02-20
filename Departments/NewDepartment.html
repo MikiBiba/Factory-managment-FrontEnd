@@ -129,6 +129,7 @@
 
           let obj = {
             Name: depName,
+            Manager: {},
           };
 
           let resp = await fetch("https://localhost:44364/api/employee");
@@ -152,6 +153,8 @@
             }
           );
           let dataUpdate = await respUpdate.json();
+
+          console.log(obj.Manager.ID);
 
           alert("Created!");
         }

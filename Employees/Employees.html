@@ -238,7 +238,11 @@
               ":00";
 
             addShiftLink.innerText = "Add New Shift";
-            addShiftLink.href = "../Shifts/AddShiftEmployee.html?id=" + emp.ID;
+            addShiftLink.href =
+              "../Shifts/AddShiftEmployee.html?id=" +
+              emp.ID +
+              "&username=" +
+              username;
 
             liAddShift.appendChild(addShiftLink);
             ulShifts.appendChild(liShift);
