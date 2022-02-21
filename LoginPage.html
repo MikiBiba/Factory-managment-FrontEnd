@@ -113,18 +113,11 @@
       async function loginUser() {
         let resp = await fetch("https://localhost:44364/api/user");
         let users = await resp.json();
-        let validUser = false;
 
-        for (let i = 0; i < users.length; i++) {
-          if (
-            users[i].User_name == userName.value &&
-            users[i].Password == userPass.value
-          ) {
-            validUser = true;
-          }
-        }
-
-        if (validUser == true) {
+        if (
+          users.find((user) => user.User_name == userName.value) &&
+          users.find((user) => user.Password == userPass.value)
+        ) {
           window.location.href = "HomePage.html?username=" + userName.value;
         } else {
           alert("Incorrect username or password");

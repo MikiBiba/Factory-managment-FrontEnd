@@ -84,7 +84,7 @@
 
     <div class="d-flex justify-content-center">
       <button
-        onclick="employeeNev()"
+        onclick="employeeNav()"
         id="employeeBtn"
         type="button"
         class="btn btn-warning btn-lg"
@@ -92,7 +92,7 @@
         <b>Employees</b>
       </button>
       <button
-        onclick="departmentNev()"
+        onclick="departmentNav()"
         id="departmentBtn"
         type="button"
         class="btn btn-warning btn-lg"
@@ -100,7 +100,7 @@
         <b>Departments</b>
       </button>
       <button
-        onclick="shiftNev()"
+        onclick="shiftNav()"
         id="shiftBtn"
         type="button"
         class="btn btn-warning btn-lg"
@@ -109,57 +109,43 @@
       </button>
     </div>
     <script>
-      let employeeBtn = document.getElementById("employeeBtn");
-      let departmentBtn = document.getElementById("departmentBtn");
-      let shiftBtn = document.getElementById("shiftBtn");
-      let spanName = document.getElementById("spanName");
+      const spanName = document.getElementById("spanName");
+      const spanActions = document.getElementById("spanActions");
 
       const params = new URLSearchParams(location.search);
-      let username = params.get("username");
-
+      const username = params.get("username");
       spanName.innerText = "Hello, " + username;
 
-      let spanActions = document.getElementById("spanActions");
+      let user;
 
       let users = JSON.parse(sessionStorage.getItem("users"));
 
-      let user = users.find((x) => x.User_name == username);
-
-      function userAction(currentUser) {
-        let user = users.find((x) => x.User_name == currentUser);
-
-        if (user.Num_of_actions > 0) {
-          user.Num_of_actions -= 1;
+      function userAction(nextLocation) {
+        console.log(user);
+        if (user.Num_of_actions) {
+          user.Num_of_actions--;
           sessionStorage.setItem("users", JSON.stringify(users));
+          window.location.href = nextLocation;
         } else {
           alert("The number of user actions is over");
           window.location.href = "LoginPage.html";
         }
       }
-
-      function employeeNev() {
-        userAction(username);
-
-        window.location.href =
-          "./Employees/Employees.html?username=" + username;
+      function employeeNav() {
+        userAction("./Employees/Employees.html?username=" + username);
       }
-      function departmentNev() {
-        userAction(username);
-
-        window.location.href =
-          "./Departments/Department.html?username=" + username;
+      function departmentNav() {
+        userAction("./Departments/Department.html?username=" + username);
       }
-      function shiftNev() {
-        userAction(username);
-
-        window.location.href = "./Shifts/shifts.html?username=" + username;
+      function shiftNav() {
+        userAction("./Shifts/shifts.html?username=" + username);
       }
 
       async function getUsersData() {
-        let resp = await fetch("https://localhost:44364/api/user");
-        let users = await resp.json();
-
+        const resp = await fetch("https://localhost:44364/api/user");
+        const users = await resp.json();
         sessionStorage.setItem("users", JSON.stringify(users));
+        user = users.find((x) => x.User_name == username);
         spanActions.innerText = `You have ${user.Num_of_actions} more actions left`;
       }
     </script>

@@ -116,8 +116,7 @@
 
       spanName.innerText = `Hello, ${username}`;
 
-      let str = sessionStorage["users"];
-      let users = JSON.parse(str);
+      let users = JSON.parse(sessionStorage.getItem("users"));
       let user = users.find((x) => x.User_name == username);
 
       spanActions.innerText = `You have ${user.Num_of_actions} more actions left`;

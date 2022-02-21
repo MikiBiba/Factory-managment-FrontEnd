@@ -145,8 +145,8 @@
         shifts.forEach((shift) => {
           let tdDate = document.createElement("td");
           tdDate.innerText = shift.Date;
-
           let tdStart = document.createElement("td");
+
           tdStart.innerText = shift.Start_time + ":00";
 
           let tdEnd = document.createElement("td");
@@ -154,16 +154,12 @@
 
           let tdEdit = document.createElement("td");
           let ulEdit = document.createElement("ul");
-
           shift.Employees.forEach((emp, i) => {
             let liEdit = document.createElement("li");
             let linkEdit = document.createElement("a");
-
             linkEdit.innerText = emp.First_name;
-
             liEdit.appendChild(linkEdit);
             ulEdit.appendChild(liEdit);
-
             linkEdit.href =
               "../Employees/EditEmployee.html?id=" +
               shift.Employees[i].ID +
@@ -172,14 +168,11 @@
           });
 
           tdEdit.appendChild(ulEdit);
-
           let trObj = document.createElement("tr");
-
           trObj.appendChild(tdDate);
           trObj.appendChild(tdStart);
           trObj.appendChild(tdEnd);
           trObj.appendChild(tdEdit);
-
           body.appendChild(trObj);
         });
       };
